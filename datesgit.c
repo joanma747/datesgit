@@ -250,7 +250,7 @@ char szfolder_path[MAX_PATH];
 	// List all the files in the folder with some info about them.
 	do
 	{
-		if (0==strcmp(ffd.cFileName, ".") || 0==strcmp(ffd.cFileName, "..") || 0==strcmp(ffd.cFileName, "datesgit.json"))
+		if (0==strcmp(ffd.cFileName, ".") || 0==strcmp(ffd.cFileName, "..") || 0==strcmp(ffd.cFileName, "datesgit.json") || 0==stricmp(ffd.cFileName, "Thumbs.db"))
 			continue;
 		if (ffd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)
 		{
@@ -322,7 +322,7 @@ char szfolderfile_path[MAX_PATH];
 	// List all the files in the folder with some info about them.
 	do
 	{
-		if (0==strcmp(ffd.cFileName, ".") || 0==strcmp(ffd.cFileName, "..") || 0==strcmp(ffd.cFileName, "datesgit.json"))
+		if (0==strcmp(ffd.cFileName, ".") || 0==strcmp(ffd.cFileName, "..") || 0==strcmp(ffd.cFileName, "datesgit.json") || 0==stricmp(ffd.cFileName, "Thumbs.db"))
 			continue;
 		if (ffd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)
 		{
@@ -336,7 +336,7 @@ char szfolderfile_path[MAX_PATH];
 		json_object=cJSON_GetObjectItem(json, ffd.cFileName);
 		if (NULL==json_object)
 		{
-			fprintf(stderr, "Cannot find a date to restore for %s in %s: %s\n", ffd.cFileName, szfolder);
+			fprintf(stderr, "Cannot find dates to restore for %s in %s\n", ffd.cFileName, szfolder);
 			if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 				count_folder->missing_folders++;
 			else
@@ -452,43 +452,43 @@ cJSON *item;
 		fprintf(stderr, "Cannot find year in: %s.%s\n", szfilename, json_object->string);
 	if (item->type!=cJSON_Number)
 		fprintf(stderr, "Wrong type for year in: %s.%s\n", szfilename, json_object->string);
-	systime.wYear=item->valueint;
+	systime.wYear=(WORD)item->valueint;
 
 	if (NULL==(item=cJSON_GetObjectItem(json_object, "M")))
 		fprintf(stderr, "Cannot find month in: %s.%s\n", szfilename, json_object->string);
 	if (item->type!=cJSON_Number)
 		fprintf(stderr, "Wrong type for month in: %s.%s\n", szfilename, json_object->string);
-	systime.wMonth=item->valueint;
+	systime.wMonth=(WORD)item->valueint;
 
 	if (NULL==(item=cJSON_GetObjectItem(json_object, "D")))
 		fprintf(stderr, "Cannot find day in: %s.%s\n", szfilename, json_object->string);
 	if (item->type!=cJSON_Number)
 		fprintf(stderr, "Wrong type for day in: %s.%s\n", szfilename, json_object->string);
-	systime.wDay=item->valueint;
+	systime.wDay=(WORD)item->valueint;
 
 	if (NULL==(item=cJSON_GetObjectItem(json_object, "h")))
 		fprintf(stderr, "Cannot find hour in: %s.%s\n", szfilename, json_object->string);
 	if (item->type!=cJSON_Number)
 		fprintf(stderr, "Wrong type for hour in: %s.%s\n", szfilename, json_object->string);
-	systime.wHour=item->valueint;
+	systime.wHour=(WORD)item->valueint;
 
 	if (NULL==(item=cJSON_GetObjectItem(json_object, "mi")))
 		fprintf(stderr, "Cannot find minute in: %s.%s\n", szfilename, json_object->string);
 	if (item->type!=cJSON_Number)
 		fprintf(stderr, "Wrong type for minute in: %s.%s\n", szfilename, json_object->string);
-	systime.wMinute=item->valueint;
+	systime.wMinute=(WORD)item->valueint;
 
 	if (NULL==(item=cJSON_GetObjectItem(json_object, "s")))
 		fprintf(stderr, "Cannot find second in: %s.%s\n", szfilename, json_object->string);
 	if (item->type!=cJSON_Number)
 		fprintf(stderr, "Wrong type for second in: %s.%s\n", szfilename, json_object->string);
-	systime.wSecond=item->valueint;
+	systime.wSecond=(WORD)item->valueint;
 
 	if (NULL==(item=cJSON_GetObjectItem(json_object, "ms")))
 		fprintf(stderr, "Cannot find milliseconds in: %s.%s\n", szfilename, json_object->string);
 	if (item->type!=cJSON_Number)
 		fprintf(stderr, "Wrong type for milliseconds in: %s.%s\n", szfilename, json_object->string);
-	systime.wMilliseconds=item->valueint;
+	systime.wMilliseconds=(WORD)item->valueint;
 
 	if (FALSE==(SystemTimeToFileTime(&systime, filetime)))
 		return 1;
